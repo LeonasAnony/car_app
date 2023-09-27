@@ -24,9 +24,9 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     _tcpBloc =  BlocProvider.of<TcpBloc>(context);
 
-    _hostEditingController = new TextEditingController(text: '10.0.2.2');
-    _portEditingController = new TextEditingController(text: '8000');
-    _chatTextEditingController = new TextEditingController(text: '');
+    _hostEditingController = TextEditingController(text: '10.0.2.2');
+    _portEditingController = TextEditingController(text: '8000');
+    _chatTextEditingController = TextEditingController(text: '');
 
     _chatTextEditingController!.addListener(() {
       setState(() {
@@ -39,14 +39,14 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TCP Client Demo'),
+        title: const Text('TCP Client Demo'),
         actions: [
           IconButton(
-            icon: Icon(Icons.info_outline),
+            icon: const Icon(Icons.info_outline),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return AboutPage();
+                  return const AboutPage();
                 }
               ));
             },
@@ -58,12 +58,12 @@ class _MainPageState extends State<MainPage> {
         listener: (BuildContext context, TcpState tcpState) { 
           if (tcpState.connectionState == SocketConnectionState.Connected) {
             ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar();
+              .hideCurrentSnackBar();
           } else if (tcpState.connectionState == SocketConnectionState.Failed) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [Text("Connection failed"), Icon(Icons.error)],
@@ -83,7 +83,7 @@ class _MainPageState extends State<MainPage> {
                     controller: _hostEditingController,
                     autovalidateMode : AutovalidateMode.always,
                     validator: (str) => isValidHost(str) ? null : 'Invalid hostname',
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       helperText: 'The ip address or hostname of the TCP server',
                       hintText: 'Enter the address here, e. g. 10.0.2.2',
                     ),
@@ -92,13 +92,12 @@ class _MainPageState extends State<MainPage> {
                     controller: _portEditingController,
                     autovalidateMode : AutovalidateMode.always,
                     validator: (str) => isValidPort(str) ? null : 'Invalid port',
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       helperText: 'The port the TCP server is listening on',
                       hintText: 'Enter the port here, e. g. 8000',
                     ),
                   ),
                   ElevatedButton(
-                    child: Text('Connect'),
                     onPressed: isValidHost(_hostEditingController!.text) && isValidPort(_portEditingController!.text)
                       ? () {
                         _tcpBloc!.add(
@@ -109,6 +108,7 @@ class _MainPageState extends State<MainPage> {
                         );
                       }
                       : null,
+                    child: const Text('Connect'),
                   )
                 ],
               ),
@@ -117,10 +117,10 @@ class _MainPageState extends State<MainPage> {
             return Center(
               child: Column(
                 children: <Widget>[
-                  CircularProgressIndicator(),
-                  Text('Connecting...'),
+                  const CircularProgressIndicator(),
+                  const Text('Connecting...'),
                   ElevatedButton(
-                    child: Text('Abort'),
+                    child: const Text('Abort'),
                     onPressed: () {
                       _tcpBloc!.add(Disconnect());
                     },
@@ -132,20 +132,18 @@ class _MainPageState extends State<MainPage> {
             return Column(
               children: [
                 Expanded(
-                  child: Container(
-                    child: ListView.builder(
-                      itemCount: tcpState.messages.length,
-                      itemBuilder: (context, idx) {
-                        Message m = tcpState.messages[idx];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Bubble(
-                            child: Text(m.message),
-                            alignment: m.sender == Sender.Client ? Alignment.centerRight : Alignment.centerLeft,
-                          ),
-                        );
-                      }
-                    ),
+                  child: ListView.builder(
+                    itemCount: tcpState.messages.length,
+                    itemBuilder: (context, idx) {
+                      Message m = tcpState.messages[idx];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Bubble(
+                          alignment: m.sender == Sender.client ? Alignment.centerRight : Alignment.centerLeft,
+                          child: Text(m.message),
+                        ),
+                      );
+                    }
                   ),
                 ),
                 Padding(
@@ -154,14 +152,14 @@ class _MainPageState extends State<MainPage> {
                     children: [
                       Expanded(
                         child: TextField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Message'
                           ),
                           controller: _chatTextEditingController,
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                         onPressed: _chatTextEditingController!.text.isEmpty
                           ? null
                           : () {
@@ -173,7 +171,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
                 ElevatedButton(
-                  child: Text('Disconnect'),
+                  child: const Text('Disconnect'),
                   onPressed: () {
                     _tcpBloc!.add(Disconnect());
                   },

@@ -45,7 +45,7 @@ class TcpBloc extends Bloc<TcpEvent, TcpState> {
             message: Message(
               message: String.fromCharCodes(event),
               timestamp: DateTime.now(),
-              sender: Sender.Server,
+              sender: Sender.server,
             )
           )
         );
@@ -83,7 +83,7 @@ class TcpBloc extends Bloc<TcpEvent, TcpState> {
       yield state.copyWithNewMessage(message: Message(
         message: event.message,
         timestamp: DateTime.now(),
-        sender: Sender.Client,
+        sender: Sender.client,
       ));
       _socket!.writeln(event.message);
     }

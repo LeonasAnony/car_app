@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
-
 enum Sender {
-  Client,
-  Server
+  client,
+  server
 }
 
 class Message {
