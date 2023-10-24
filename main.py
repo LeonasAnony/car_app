@@ -14,6 +14,10 @@ class EntryWindow(Gtk.Window):
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(vbox)
 
+
+
+
+
         self.entry = Gtk.Entry()
         self.entry.set_text("Hello World")
         vbox.pack_start(self.entry, True, True, 0)
@@ -71,8 +75,51 @@ class EntryWindow(Gtk.Window):
             icon_name = None
         self.entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY, icon_name)
 
+class DialogConnect(Gtk.Dialog):
+    def __init__(self, parent):
+        super().__init__(title="Connect", transient_for=parent, flags=0)
+        self.add_buttons(
+            Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
+        )
 
-win = EntryWindow()
+        self.set_default_size(150, 100)
+
+        label = Gtk.Label(label="Connect with ESP32 over TCP")
+
+        box = self.get_content_area()
+        box.add(label)
+        self.show_all()
+
+
+class DialogWindow(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Dialog Example")
+
+        self.set_border_width(6)
+
+        button = Gtk.Button(label="Open dialog")
+        button.connect("clicked", self.on_button_clicked)
+
+        self.add(button)
+
+    def on_button_clicked(self, widget):
+        dialog = DialogConnect(self)
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            print("The OK button was clicked")
+        elif response == Gtk.ResponseType.CANCEL:
+            print("The Cancel button was clicked")
+
+        dialog.destroy()
+
+
+win = DialogWindow()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()
+
+#win = EntryWindow()
+#win.connect("destroy", Gtk.main_quit)
+#win.show_all()
+#Gtk.main()
