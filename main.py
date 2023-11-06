@@ -28,7 +28,15 @@ class ConnectWindow(Gtk.Window):
 		self.entryport.set_text("8000")
 		self.box.pack_start(self.entryport, True, True, 0)
 
+		self.labelbutton = Gtk.Label(label="button")
+		self.box.pack_start(self.labelbutton, False, False, 0)
+		self.buttonsubmit = Gtk.Button.new_with_label("Click Me")
+		self.buttonsubmit.connect("clicked", self.on_click_me_clicked)
+		self.box.pack_start(self.buttonsubmit, True, True, 0)
 
+	def on_click_me_clicked(self, button):
+       		print('"Click me" button was clicked')
+	
 win = ConnectWindow()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
