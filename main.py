@@ -10,34 +10,41 @@ class ConnectWindow(Gtk.Window):
 
 		self.set_default_size(600, 400)
 
-		self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-		self.add(self.box)
+		self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+		self.add(self.vbox)
 
 		self.label = Gtk.Label(label="Connect with ESP32 over TCP")
-		self.box.pack_start(self.label, True, True, 0)
+		self.vbox.pack_start(self.label, True, True, 0)
 
 		self.labelip = Gtk.Label(label="IP Address:")
-		self.box.pack_start(self.labelip, False, False, 0)
+		self.vbox.pack_start(self.labelip, False, False, 0)
 		self.entryip = Gtk.Entry()
 		self.entryip.set_text("127.0.0.1")
-		self.box.pack_start(self.entryip, True, True, 0)
+		self.vbox.pack_start(self.entryip, True, True, 0)
 
 		self.labelport = Gtk.Label(label="Port:")
-		self.box.pack_start(self.labelport, False, False, 0)
+		self.vbox.pack_start(self.labelport, False, False, 0)
 		self.entryport = Gtk.Entry()
 		self.entryport.set_text("8000")
-		self.box.pack_start(self.entryport, True, True, 0)
+		self.vbox.pack_start(self.entryport, True, True, 0)
 
-		self.labelbutton = Gtk.Label(label="button")
-		self.box.pack_start(self.labelbutton, False, False, 0)
-		self.buttonsubmit = Gtk.Button.new_with_label("Click Me")
-		self.buttonsubmit.connect("clicked", self.on_click_me_clicked)
-		self.box.pack_start(self.buttonsubmit, True, True, 0)
+		self.buttonconnect = Gtk.Button.new_with_label("Connect")
+		self.buttonconnect.connect("clicked", self.on_connect)
+		self.vbox.pack_start(self.buttonconnect, True, True, 0)
 
-	def on_click_me_clicked(self, button):
-       		print('"Click me" button was clicked')
+	def on_connect(self, button):
+		self.destroy()
+		win2 = MainWindow()
+		win2.connect("destroy", Gtk.main_quit)
+		win2.show()
+
+class MainWindow(Gtk.Window):
+	def __init__(self):
+		super().__init__(title="ESP32 Interface")
+
+		self.set_default_size(800, 600)
 	
 win = ConnectWindow()
-win.connect("destroy", Gtk.main_quit)
+win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 Gtk.main()
