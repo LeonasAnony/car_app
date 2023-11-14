@@ -5,8 +5,6 @@ import time
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GdkPixbuf, Gio
 
-tn = telnetlib.Telnet()
-
 class ConnectWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="ESP32 Interface Connect")
@@ -36,18 +34,21 @@ class ConnectWindow(Gtk.Window):
         vbox.pack_start(self.buttonconnect, True, True, 0)
 
     def on_connect(self, button):
+        tn = telnetlib.Telnet()
         tn.open(self.entryip.get_text(), self.entryport.get_text())
         tn.read_until("-> ".encode("utf-8"))
         
         self.destroy()
-        win2 = MainWindow()
+        win2 = MainWindow(tn)
         win2.connect("destroy", Gtk.main_quit)
         win2.show_all()
 
 
 
 class MainWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, tncon):
+        self.tncon = tncon
+        
         super().__init__(title="ESP32 Interface")
         self.set_border_width(10)
 
@@ -89,13 +90,9 @@ class MainWindow(Gtk.Window):
     def on_switch_state_changed(self, switch, state):
         # Handle switch state change here
         if state:
-            # If the switch is on, change the color of the LEDs to green
-            self.led1.set_color(0, 255, 0)  # Green
-            self.led2.set_color(0, 255, 0)
+            self.tncon.write("set led on\n".encode("utf-8"))
         else:
-            # If the switch is off, change the color of the LEDs to red
-            self.led1.set_color(255, 0, 0)  # Red
-            self.led2.set_color(255, 0, 0)
+            self.tncon.write("set led off\n".encode("utf-8"))
 
 
 class LEDDrawingArea(Gtk.DrawingArea):
