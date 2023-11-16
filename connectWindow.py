@@ -36,7 +36,7 @@ class ConnectWindow(Gtk.Window):
     def on_connect(self, button):
         tn = telnetlib.Telnet()
         tn.open(self.entryip.get_text(), self.entryport.get_text())
-        tn.read_until("-> ".encode("utf-8"))
+   #     tn.read_until("-> ".encode("utf-8"))
         
         self.destroy()
         win2 = MainWindow(tn)

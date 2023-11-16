@@ -1,6 +1,5 @@
 import gi
-import telnetlib
-from .helper.ledDrawing import LEDDrawingArea
+import helper 
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GdkPixbuf, Gio
@@ -33,7 +32,7 @@ class MainWindow(Gtk.Window):
         row.add(hbox)
         label = Gtk.Label(label="Switch State", xalign=0)
         hbox.pack_start(label, True, True, 0)
-        self.led1 = LEDDrawingArea()
+        self.led1 = helper.LEDDrawingArea()
         hbox.pack_start(self.led1, False, True, 0)
         listbox.add(row)
 
@@ -41,7 +40,7 @@ class MainWindow(Gtk.Window):
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
         row.add(hbox)
         label = Gtk.Label(label="Heartbeat", xalign=0)
-        self.led2 = LEDDrawingArea()
+        self.led2 = helper.LEDDrawingArea()
         hbox.pack_start(label, True, True, 0)
         hbox.pack_start(self.led2, False, True, 0)
         listbox.add(row)
@@ -53,3 +52,5 @@ class MainWindow(Gtk.Window):
             self.tncon.write("set led on\n".encode("utf-8"))
         else:
             self.tncon.write("set led off\n".encode("utf-8"))
+
+
