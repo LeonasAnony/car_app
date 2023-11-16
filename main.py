@@ -1,11 +1,39 @@
 import gi
+import telnetlib
+import threading
 from connectWindow import ConnectWindow
+from mainWindow import MainWindow
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, GdkPixbuf, Gio
+from gi.repository import Gtk
+
+def open_main_window(tn):
+	mainWin = MainWindow(tn)
+	mainWin.connect("destroy", Gtk.main_quit)
+	mainWin.connect("delete-event", Gtk.main_quit)
+	mainWin.show_all()
+
+	listenThread = threading.Thread(target=telnet_listen, args=(tn, mainWin))
+	listenThread.start()
+
+def telnet_listen(tn, win): #TODO: eventually move this to ./helper/
+	match("telnet_read"): #TODO: read Telnet and switch
+		case("Heartbeat"):
+			win.ledHeartbeat.set_color(0,255,0)
+		case("Switch ON"):
+			win.ledSwitch.set_color(0,255,0)
+		case("Switch OFF"):
+			win.ledSwitch.set_color(255,0,0)
+
+	if(win.ledHeartbeat):
+		pass
+		#TODO: slowly dimm Heartbeat LED
 
 if __name__ == "__main__":
-    win = ConnectWindow()
-    win.connect("delete-event", Gtk.main_quit)
-    win.show_all()
-    Gtk.main()
+	tn = telnetlib.Telnet()
+	conWin = ConnectWindow(tn)
+	conWin.connect("delete-event", Gtk.main_quit)
+	conWin.connect("destroy", open_main_window(tn))
+	conWin.show_all()
+	mainThread = threading.Thread(target=Gtk.main)
+	mainThread.start()
