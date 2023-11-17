@@ -19,13 +19,13 @@ class ConnectWindow(Gtk.Window):
 		labelip = Gtk.Label(label="IP Address:")
 		vbox.pack_start(labelip, False, False, 0)
 		self.entryip = Gtk.Entry()
-		self.entryip.set_text("127.0.0.1")
+		self.entryip.set_text("bc.doorsign.int")
 		vbox.pack_start(self.entryip, True, True, 0)
 
 		labelport = Gtk.Label(label="Port:")
 		vbox.pack_start(labelport, False, False, 0)
 		self.entryport = Gtk.Entry()
-		self.entryport.set_text("8000")
+		self.entryport.set_text("4711")
 		vbox.pack_start(self.entryport, True, True, 0)
 
 		self.buttonconnect = Gtk.Button.new_with_label("Connect")
@@ -36,8 +36,10 @@ class ConnectWindow(Gtk.Window):
 
 	def on_connect(self, button):
 		self.tncon.open(self.entryip.get_text(), self.entryport.get_text())
-#		self.tncon.read_until("-> ".encode("utf-8"))
+		self.tncon.read_until(b"-> ")
 
 		#TODO: Get initial Values and set Color acordingly
+
+		self.tncon.write(b"set tick on\n")
 
 		self.destroy()
