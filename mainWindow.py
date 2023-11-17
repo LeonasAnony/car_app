@@ -45,10 +45,30 @@ class MainWindow(Gtk.Window):
 		hbox.pack_start(self.ledHeartbeat, False, True, 0)
 		listbox.add(row)
 
-
 	def on_switch_state_changed(self, switch, state):
 		# Handle switch state change here
 		if state:
-			self.tncon.write("set led on\n".encode("utf-8"))
+			self.tncon.write(b"set led on\n")
 		else:
-			self.tncon.write("set led off\n".encode("utf-8"))
+			self.tncon.write(b"set led off\n")
+
+	def dimm_led(self, led, color="r"): #TODO: eventually move this to ./helper/#
+		pointer = 0
+		if color == "g":
+			pointer = 1
+		elif color == "b":
+			pointer = 2
+
+		colorbrightness = led.rgb_color[pointer]
+		if(led.rgb_color != (128,128,128)):
+			match color:
+				case "r":
+					led.set_color((colorbrightness-10), 0, 0)
+				case "g":
+					led.set_color(0, (colorbrightness-10), 0)
+				case "b":
+					led.set_color(0, 0, (colorbrightness-10))
+		if(led.rgb_color[pointer] <= 120):
+			led.set_color(128,128,128)
+
+		return True
