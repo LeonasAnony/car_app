@@ -1,8 +1,11 @@
 import gi
 import telnetlib
 import threading
+import sys
+import time
 from connectWindow import ConnectWindow
 from mainWindow import MainWindow
+import helper
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GObject
@@ -19,28 +22,22 @@ class ESP32_Interface():
 
 	def stop_app(self, *args):
 		Gtk.main_quit()
-		# TODO: exit app
+		self.tn.write(b"set tick off\n")
+		time.sleep(0.5)
+		sys.exit()
 
 	def open_main_window(self, *args):
 		self.mainWin = MainWindow(self.tn)
 		self.mainWin.connect("destroy", self.stop_app)
-		self.mainWin.connect("delete-event", self.stop_app) #TODO: add quit fun which stops threads
+		self.mainWin.connect("delete-event", self.stop_app)
 		self.mainWin.show_all()
-		GObject.timeout_add(100, self.mainWin.dimm_led, self.mainWin.ledHeartbeat, "g")
-
-		self.listenThread = threading.Thread(target=self.telnet_listen)
+		GObject.timeout_add(100, helper.LEDDrawing.dimm_led, self.mainWin.ledHeartbeat, "g")
+		
+		tnlisten = helper.TelnetListen(self.tn, self.mainWin)
+		self.listenThread = threading.Thread(target=tnlisten.telnet_run)
 		self.listenThread.start()
 
-	def telnet_listen(self): #TODO: eventually move this to ./helper/#
-		while(True):
-			msg = self.tn.read_until(b"\r\n")
-			print(msg)
-			if(b"<TICK>" in msg):
-				self.mainWin.ledHeartbeat.set_color(0,255,0)
-			elif(msg == b"<EVENT><KEY>switch</KEY><VALUE>on</VALUE></EVENT>\r\n"):
-				self.mainWin.ledSwitch.set_color(0,255,0)
-			elif(msg == b"<EVENT><KEY>switch</KEY><VALUE>off</VALUE></EVENT>\r\n"):
-				self.mainWin.ledSwitch.set_color(255,0,0)
+	
 
 if __name__ == "__main__":
 	ESP32_Interface()

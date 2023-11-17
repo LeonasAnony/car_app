@@ -32,7 +32,7 @@ class MainWindow(Gtk.Window):
 		row.add(hbox)
 		label = Gtk.Label(label="Switch State", xalign=0)
 		hbox.pack_start(label, True, True, 0)
-		self.ledSwitch = helper.LEDDrawingArea()
+		self.ledSwitch = helper.LEDDrawing()
 		hbox.pack_start(self.ledSwitch, False, True, 0)
 		listbox.add(row)
 
@@ -40,7 +40,7 @@ class MainWindow(Gtk.Window):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
 		row.add(hbox)
 		label = Gtk.Label(label="Heartbeat", xalign=0)
-		self.ledHeartbeat = helper.LEDDrawingArea()
+		self.ledHeartbeat = helper.LEDDrawing()
 		hbox.pack_start(label, True, True, 0)
 		hbox.pack_start(self.ledHeartbeat, False, True, 0)
 		listbox.add(row)
@@ -52,23 +52,4 @@ class MainWindow(Gtk.Window):
 		else:
 			self.tncon.write(b"set led off\n")
 
-	def dimm_led(self, led, color="r"): #TODO: eventually move this to ./helper/#
-		pointer = 0
-		if color == "g":
-			pointer = 1
-		elif color == "b":
-			pointer = 2
-
-		colorbrightness = led.rgb_color[pointer]
-		if(led.rgb_color != (128,128,128)):
-			match color:
-				case "r":
-					led.set_color((colorbrightness-10), 0, 0)
-				case "g":
-					led.set_color(0, (colorbrightness-10), 0)
-				case "b":
-					led.set_color(0, 0, (colorbrightness-10))
-		if(led.rgb_color[pointer] <= 120):
-			led.set_color(128,128,128)
-
-		return True
+	
