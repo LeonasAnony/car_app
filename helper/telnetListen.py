@@ -1,3 +1,5 @@
+from main import DEBUG
+
 class TelnetListen():
 	def __init__(self, tn, win):
 		self.tn = tn
@@ -6,7 +8,8 @@ class TelnetListen():
 	def telnet_run (self):
 		while(True):
 			msg = self.tn.read_until(b"\r\n")
-			print(msg)
+			if  DEBUG == True:
+				print(msg)
 			if(b"<TICK>" in msg):
 				self.win.ledHeartbeat.set_color(0,255,0)
 			elif(b"<EVENT><KEY>switch</KEY><VALUE>on</VALUE></EVENT>\r\n" in msg):

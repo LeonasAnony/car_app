@@ -7,6 +7,8 @@ from connectWindow import ConnectWindow
 from mainWindow import MainWindow
 import helper
 
+DEBUG = 0
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GObject
 
