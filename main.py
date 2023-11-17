@@ -19,6 +19,7 @@ class ESP32_Interface():
 
 	def stop_app(self, *args):
 		Gtk.main_quit()
+		# TODO: exit app
 
 	def open_main_window(self, *args):
 		self.mainWin = MainWindow(self.tn)
