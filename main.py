@@ -33,7 +33,7 @@ if __name__ == "__main__":
 	tn = telnetlib.Telnet()
 	conWin = ConnectWindow(tn)
 	conWin.connect("delete-event", Gtk.main_quit)
-	conWin.connect("destroy", open_main_window(tn))
+	conWin.connect("destroy", open_main_window, tn)
 	conWin.show_all()
 	mainThread = threading.Thread(target=Gtk.main)
 	mainThread.start()
