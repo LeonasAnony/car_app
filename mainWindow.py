@@ -39,11 +39,19 @@ class MainWindow(Gtk.Window):
 		row = Gtk.ListBoxRow()
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
 		row.add(hbox)
-		label = Gtk.Label(label="Heartbeat", xalign=0)
+		heartbeatbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		label = Gtk.Label(label="Heartbeat:", xalign=0)
+		self.counter = Gtk.Label(label="99", xalign=0)
+		heartbeatbox.pack_start(label, False, True, 0)
+		heartbeatbox.pack_start(self.counter, True, True, 0)
 		self.ledHeartbeat = helper.LEDDrawing()
-		hbox.pack_start(label, True, True, 0)
+		hbox.pack_start(heartbeatbox, True, True, 0)
 		hbox.pack_start(self.ledHeartbeat, False, True, 0)
 		listbox.add(row)
+
+		#TODO: add Timeout field
+		#TODO: add value entry
+		#TODO: add disconnect / reconnect button
 
 	def on_switch_state_changed(self, switch, state):
 		# Handle switch state change here
@@ -51,5 +59,3 @@ class MainWindow(Gtk.Window):
 			self.tncon.write(b"set led on\n")
 		else:
 			self.tncon.write(b"set led off\n")
-
-	
