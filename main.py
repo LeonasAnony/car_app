@@ -7,10 +7,10 @@ from connectWindow import ConnectWindow
 from mainWindow import MainWindow
 import helper
 
-DEBUG = 0
+#TODO: DEBUG/ Logger
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GLib
 
 class ESP32_Interface():
 	def __init__(self):
@@ -33,13 +33,12 @@ class ESP32_Interface():
 		self.mainWin.connect("destroy", self.stop_app)
 		self.mainWin.connect("delete-event", self.stop_app)
 		self.mainWin.show_all()
-		GObject.timeout_add(100, helper.LEDDrawing.dimm_led, self.mainWin.ledHeartbeat, "g")
+		GLib.timeout_add(100, helper.LEDDrawing.dimm_led, self.mainWin.ledHeartbeat, "g")
 		
 		tnlisten = helper.TelnetListen(self.tn, self.mainWin)
 		self.listenThread = threading.Thread(target=tnlisten.telnet_run)
 		self.listenThread.start()
 
-	
 
 if __name__ == "__main__":
 	ESP32_Interface()
