@@ -143,3 +143,10 @@ cython_debug/
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+
+###################################
+############# PROJECT #############
+###################################
+Secret.*
+secret.*
