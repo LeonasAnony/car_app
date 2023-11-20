@@ -49,7 +49,6 @@ class MainWindow(Gtk.Window):
 		hbox.pack_start(self.ledHeartbeat, False, True, 0)
 		listbox.add(row)
 
-		#TODO: add Timeout field
 		#TODO: add value entry
 		#TODO: add disconnect / reconnect button
 

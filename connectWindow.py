@@ -26,7 +26,8 @@ class ConnectWindow(Gtk.Window):
 		vbox.pack_start(labelport, False, False, 0)
 		self.entryport = Gtk.Entry()
 		self.entryport.set_text("4711")
-		vbox.pack_start(self.entryport, True, True, 0)
+
+		#TODO: add Timeout field
 
 		self.buttonconnect = Gtk.Button.new_with_label("Connect")
 		self.buttonconnect.connect("clicked", self.on_connect)
@@ -38,8 +39,11 @@ class ConnectWindow(Gtk.Window):
 		self.tncon.open(self.entryip.get_text(), self.entryport.get_text())
 		self.tncon.read_until(b"-> ")
 
-		#TODO: Get initial Values and set Color acordingly
+		#TODO: Get initial Values and set Color acordingly (main or mainWindow are better places to do this)
+		#	   Get switch
+		#	   Get led
+		#	   Get value
 
-		self.tncon.write(b"set tick on\n")
+		self.tncon.write(b"set tick on\n") #TODO: rethink setting tick on here, maybe better in main
 
 		self.destroy()
