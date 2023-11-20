@@ -8,24 +8,25 @@ class ConnectWindow(Gtk.Window):
 	def __init__(self, tncon):
 		super().__init__(title="ESP32 Interface Connect")
 
-		self.set_default_size(600, 400)
+		self.set_default_size(400, -1)
 
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 		self.add(vbox)
 
 		title = Gtk.Label(label="Connect with ESP32 over TCP")
-		vbox.pack_start(title, True, True, 0)
+		vbox.pack_start(title, False, False, 25)
 
 		labelip = Gtk.Label(label="IP Address:")
-		vbox.pack_start(labelip, False, False, 0)
+		vbox.pack_start(labelip, False, False, 5)
 		self.entryip = Gtk.Entry()
 		self.entryip.set_text("bc.doorsign.int")
-		vbox.pack_start(self.entryip, True, True, 0)
+		vbox.pack_start(self.entryip, False, True, 0)
 
 		labelport = Gtk.Label(label="Port:")
-		vbox.pack_start(labelport, False, False, 0)
+		vbox.pack_start(labelport, False, False, 5)
 		self.entryport = Gtk.Entry()
 		self.entryport.set_text("4711")
+		vbox.pack_start(self.entryport, False, True, 0)
 
 		#TODO: add Timeout field
 

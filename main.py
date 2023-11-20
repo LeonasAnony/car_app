@@ -33,7 +33,7 @@ class ESP32_Interface():
 		self.mainWin.connect("destroy", self.stop_app)
 		self.mainWin.connect("delete-event", self.stop_app)
 		self.mainWin.show_all()
-		GLib.timeout_add(100, helper.LEDDrawing.dimm_led, self.mainWin.ledHeartbeat, "g")
+		GLib.timeout_add(100, self.mainWin.ledHeartbeat.dimm_led, "g")
 		
 		tnlisten = helper.TelnetListen(self.tn, self.mainWin)
 		self.listenThread = threading.Thread(target=tnlisten.telnet_run)
