@@ -34,7 +34,7 @@ const char* INFO_DHCP                     = " (DHCP)";
 const char* INFO_MAC                      = "mac:  ";
 const char* INFO_FUNCT_OK                 = "ok";
 const char* INFO_PROMPT                   = "-> ";
-const char* INFO_CONNECTING               = "Connecting to WiFi";
+const char* INFO_CONNECTING               = "Connecting to WiFi SSID: ";
 const char* UNDEFINED_NAME                = "undefined";
 const char* EXCEPTION_BUFFER_TO_SMALL     = "exception: buffer tp small";
 const char* EXCEPTION_UNKNOWN_COMMAND     = "exception: unknown command";
@@ -85,13 +85,13 @@ void setup() {
   Serial.begin(115200);
   WiFi.begin(WLAN_SSID, WPA2_PASSWORD);
 
-  Serial.println("");
+  Serial.println();
   Serial.println(INFO_TITLE);
   
   server.begin();
 
   Serial.print(INFO_CONNECTING);
-  Serial.print(" ");
+  Serial.println(WLAN_SSID);
 
   byte counter = 0;
   while (WiFi.status() != WL_CONNECTED) {
@@ -102,10 +102,11 @@ void setup() {
     if (counter % 4 == 1) selectedChar = '|';
     if (counter % 4 == 2) selectedChar = '/';
     Serial.print(selectedChar);
+    Serial.print("\r");
     counter++;
   }
-  
-  Serial.println("");
+
+  Serial.println("Connected:");
   Serial.print(INFO_MAC);
   Serial.println(WiFi.macAddress());
   Serial.print(INFO_IP);
