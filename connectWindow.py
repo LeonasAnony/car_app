@@ -28,11 +28,15 @@ class ConnectWindow(Gtk.Window):
 		self.entryport.set_text("4711")
 		vbox.pack_start(self.entryport, False, True, 0)
 
-		#TODO: add Timeout field
+		labelport = Gtk.Label(label="Connection Timeout:")
+		vbox.pack_start(labelport, False, False, 5)
+		adjustment = Gtk.Adjustment(5.0, 2.0, 10.0, 1.0, 2.0, 0.0);
+		self.spintimeout = Gtk.SpinButton.new(adjustment, 1.0, 0);
+		vbox.pack_start(self.spintimeout, False, True, 0)
 
-		self.buttonconnect = Gtk.Button.new_with_label("Connect")
-		self.buttonconnect.connect("clicked", self.on_connect)
-		vbox.pack_start(self.buttonconnect, True, True, 0)
+		buttonconnect = Gtk.Button.new_with_label("Connect")
+		buttonconnect.connect("clicked", self.on_connect)
+		vbox.pack_start(buttonconnect, True, True, 0)
 
 		self.tncon = tncon
 
