@@ -4,9 +4,9 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
 class LEDDrawing(Gtk.DrawingArea):
-	def __init__(self):
+	def __init__(self, size):
 		super().__init__()
-		self.set_size_request(50, 50)
+		self.set_size_request(size, size)
 		self.rgb_color = (128, 128, 128)  # Initial color is red (RGB)
 
 		self.connect("draw", self.on_draw)
