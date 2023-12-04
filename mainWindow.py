@@ -5,8 +5,8 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 class MainWindow(Gtk.Window):
-	def __init__(self, tncon):
-		self.tncon = tncon
+	def __init__(self, tnhelper):
+		self.tnhelper = tnhelper
 		
 		super().__init__(title="ESP32 Interface")
 		self.set_border_width(8)
@@ -58,19 +58,20 @@ class MainWindow(Gtk.Window):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		row.add(hbox)
 		self.ledConnection = helper.LEDDrawing(40)
-		buttonDisconnect = Gtk.Button.new_with_label("Disconnect")
-#		buttonDisconnect.connect("clicked", self.disconnect)
-		buttonReconnect = Gtk.Button.new_with_label("Reconnect")
-#		buttonReconnect.connect("clicked", self.reconnect)
+		self.buttonDisconnect = Gtk.Button.new_with_label("Disconnect")
+		self.buttonDisconnect.connect("clicked", self.tnhelper.disconnect)
+		self.buttonDisconnect.set_sensitive(False)
+		self.buttonReconnect = Gtk.Button.new_with_label("Reconnect")
+		self.buttonReconnect.connect("clicked", self.tnhelper.reconnect)
 		hbox.pack_start(self.ledConnection, False, True, 0)
-		hbox.pack_start(buttonDisconnect, False, True, 0)
-		hbox.pack_start(buttonReconnect, True, True, padding)
+		hbox.pack_start(self.buttonDisconnect, False, True, 0)
+		hbox.pack_start(self.buttonReconnect, True, True, padding)
 		listbox.add(row)
 
 
 	def on_switch_state_changed(self, switch, state):
 		# Handle switch state change here
 		if state:
-			self.tncon.write(b"set led on\n")
+			self.tnhelper.con.write(b"set led on\n")
 		else:
-			self.tncon.write(b"set led off\n")
+			self.tnhelper.con.write(b"set led off\n")

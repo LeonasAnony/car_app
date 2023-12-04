@@ -5,7 +5,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 class ConnectWindow(Gtk.Window):
-	def __init__(self, tncon):
+	def __init__(self, tnhelper):
 		super().__init__(title="ESP32 Interface Connect")
 
 		self.set_default_size(400, -1)
@@ -28,27 +28,29 @@ class ConnectWindow(Gtk.Window):
 		self.entryport.set_text("4711")
 		vbox.pack_start(self.entryport, False, True, 0)
 
-		labelport = Gtk.Label(label="Connection Timeout:")
-		vbox.pack_start(labelport, False, False, 5)
+		labelbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		labeltimeout = Gtk.Label(label="Connection Timeout:")
+		labelreconnect = Gtk.Label(label="Auto Reconnect:")
+		labelbox.pack_start(labeltimeout, True, False, 5)
+		labelbox.pack_start(labelreconnect, True, False, 5)
+		settingbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		adjustment = Gtk.Adjustment(5.0, 2.0, 10.0, 1.0, 2.0, 0.0);
 		self.spintimeout = Gtk.SpinButton.new(adjustment, 1.0, 0);
-		vbox.pack_start(self.spintimeout, False, True, 0)
+		self.switchauto = Gtk.Switch()
+		self.switchauto.props.valign = Gtk.Align.CENTER
+		self.switchauto.set_active(True)
+		settingbox.pack_start(self.spintimeout, True, True, 5)
+		settingbox.pack_start(self.switchauto, True, False, 5)
+		vbox.pack_start(labelbox, False, True, 0)
+		vbox.pack_start(settingbox, False, True, 0)
 
 		buttonconnect = Gtk.Button.new_with_label("Connect")
 		buttonconnect.connect("clicked", self.on_connect)
 		vbox.pack_start(buttonconnect, True, True, 0)
 
-		self.tncon = tncon
+		self.tnhelper = tnhelper
 
-	def on_connect(self, button):
-		self.tncon.open(self.entryip.get_text(), self.entryport.get_text())
-		self.tncon.read_until(b"-> ")
-
-		#TODO: Get initial Values and set Color acordingly (main or mainWindow are better places to do this)
-		#	   Get switch
-		#	   Get led
-		#	   Get value
-
-		self.tncon.write(b"set tick on\n") #TODO: rethink setting tick on here, maybe better in main
+	def on_connect(self, *args):
+		self.tnhelper.connect(self.entryip.get_text(), self.entryport.get_text(), self.spintimeout.get_value_as_int(), self.switchauto.get_active())
 
 		self.destroy()
